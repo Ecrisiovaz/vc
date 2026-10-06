@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="tufava">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>tufava — Learn crypto and memecoin trading on your phone</title>
+<meta name="description" content="Plain-English guides to buying and selling crypto and memecoins from your smartphone, with safety and risk first.">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface-2:#f5f5f7; --text:#1d1d1f; --muted:#6e6e73;
+  --line:rgba(0,0,0,.1); --blue:#0071e3; --blue-text:#ffffff; --green:#1d8f4e; --red:#d92d20;
+  color-scheme:light; --nav:rgba(255,255,255,.8); --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 30px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.5;-webkit-font-smoothing:antialiased;font-size:17px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:8px}
+button{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--nav);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:52px}
+.brand{display:inline-flex;align-items:center;gap:9px;margin-left:-6px;padding:6px 12px 6px 6px;border-radius:14px;color:var(--text);font-weight:700;font-size:20px;letter-spacing:-.035em;line-height:1;transition:background .2s ease,transform .15s ease}
+.brand svg{width:30px;height:30px;border-radius:9px;box-shadow:0 1px 2px rgba(0,0,0,.15),0 4px 10px rgba(94,92,230,.28);flex:none}
+.brand:hover{background:var(--surface-2);text-decoration:none}
+.brand:active{transform:scale(.96)}
+.nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+.nav ul a{color:var(--text);font-size:13px;opacity:.82}
+.nav ul a:hover{opacity:1;text-decoration:none}
+
+/* Hero */
+.hero{text-align:center;padding:72px 0 0;overflow:hidden}
+.hero h1{font-size:clamp(40px,8vw,80px);line-height:1.04;letter-spacing:-.03em;font-weight:700;margin:0 auto;max-width:12.5em}
+.hero p.lead{font-size:clamp(19px,2.6vw,26px);line-height:1.3;color:var(--muted);max-width:30em;margin:22px auto 0;font-weight:400;letter-spacing:-.01em}
+.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 24px;border-radius:980px;font-size:17px;border:0;cursor:pointer}
+.btn.primary{background:var(--blue);color:var(--blue-text)}
+.btn.primary:hover{filter:brightness(1.08);text-decoration:none}
+.btn.link{background:none;color:var(--blue);padding:0 8px}
+.btn.link:hover{text-decoration:underline}
+
+/* Phone mock */
+.phone{position:relative;width:min(300px,78vw);margin:56px auto 0;aspect-ratio:300/560;background:#0a0a0a;border-radius:46px 46px 0 0;
+  padding:12px 12px 0;box-shadow:0 0 0 2px #3a3a3c inset,0 30px 80px rgba(0,0,0,.28)}
+.screen{height:100%;background:#000;border-radius:36px 36px 0 0;color:#f5f5f7;padding:14px 18px 0;overflow:hidden;position:relative}
+.island{width:84px;height:24px;background:#000;border-radius:20px;margin:0 auto 16px;box-shadow:0 0 0 1px #1c1c1e}
+.demo-tag{display:inline-block;font-size:11px;color:#a1a1a6;border:1px solid #3a3a3c;border-radius:20px;padding:2px 9px}
+.coin{display:flex;align-items:center;gap:10px;margin-top:14px;text-align:left}
+.coin i{width:34px;height:34px;border-radius:50%;background:#f7931a;display:grid;place-items:center;font-style:normal;font-weight:700;color:#fff;font-size:17px}
+.coin b{display:block;font-size:15px}
+.coin small{color:#a1a1a6;font-size:12px}
+.price{font-size:34px;font-weight:700;letter-spacing:-.02em;text-align:left;margin-top:14px}
+.chg{font-size:13px;color:#32d74b;text-align:left}
+.spark{width:100%;height:96px;margin-top:6px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#1c1c1e;border-radius:10px;padding:3px;margin-top:14px;font-size:13px}
+.seg span{padding:6px 0;border-radius:8px;color:#a1a1a6}
+.seg span.on{background:#3a3a3c;color:#fff}
+.amount{margin-top:12px;background:#1c1c1e;border-radius:12px;padding:10px 14px;display:flex;justify-content:space-between;font-size:14px;text-align:left}
+.amount small{color:#a1a1a6;display:block;font-size:11px}
+.buy{margin-top:12px;background:#32d74b;color:#00210c;font-weight:600;border-radius:14px;padding:13px 0;font-size:16px}
+
+/* Sections */
+section{padding:88px 0 0}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+h2{font-size:clamp(30px,5vw,48px);letter-spacing:-.025em;line-height:1.08;margin:0;font-weight:700}
+.sec-sub{color:var(--muted);font-size:19px;margin:10px 0 0;max-width:34em}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--surface-2);border:1px solid var(--line);border-radius:980px;padding:7px 16px;font-size:14px;cursor:pointer;min-height:36px}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* Featured */
+.featured{display:grid;grid-template-columns:1.1fr 1fr;background:var(--surface);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:22px;color:var(--text)}
+.featured:hover{text-decoration:none}
+.featured .art{background:linear-gradient(135deg,#ff9f0a 0%,#ff375f 55%,#5e5ce6 100%);min-height:280px;display:grid;place-items:center;font-size:96px}
+.featured .txt{padding:36px 32px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.cat{font-size:13px;font-weight:600;color:var(--muted)}
+.featured h3{font-size:clamp(26px,3.4vw,36px);line-height:1.12;letter-spacing:-.02em;margin:0}
+.featured p{margin:0;color:var(--muted)}
+.more{color:var(--blue);font-size:17px;margin-top:6px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+.card{background:var(--surface);border-radius:24px;padding:28px 26px;color:var(--text);display:flex;flex-direction:column;gap:10px;min-height:230px;box-shadow:var(--shadow);transition:transform .25s ease}
+.card:hover{text-decoration:none;transform:scale(1.015)}
+.card h3{font-size:22px;line-height:1.2;letter-spacing:-.015em;margin:0}
+.card p{margin:0;color:var(--muted);font-size:16px}
+.card .foot{margin-top:auto;font-size:14px;color:var(--muted)}
+.empty{color:var(--muted);padding:30px 0}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.step{background:var(--surface);border-radius:28px;box-shadow:var(--shadow);padding:18px 18px 22px;display:flex;flex-direction:column;gap:14px;margin:0}
+.step .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--blue);color:var(--blue-text);font-size:15px;font-weight:600}
+.step .shot{background:var(--surface-2);border-radius:20px;overflow:hidden;display:grid;place-items:center;min-height:220px}
+.step img{display:block;width:100%;height:auto}
+.step .miss{padding:24px;text-align:center;color:var(--muted);font-size:14px}
+.step figcaption{font-size:19px;font-weight:600;letter-spacing:-.01em}
+
+/* Video */
+.video{position:relative;width:100%;aspect-ratio:16/9;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);background:#000}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* Glossary */
+.gloss{background:var(--surface);border-radius:28px;box-shadow:var(--shadow);overflow:hidden}
+details{border-bottom:1px solid var(--line)}
+details:last-child{border-bottom:0}
+summary{list-style:none;cursor:pointer;padding:20px 26px;font-size:19px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:60px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:26px;font-weight:300;color:var(--muted);transition:transform .2s ease}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0;padding:0 26px 22px;color:var(--muted);max-width:44em}
+
+/* Article */
+.article{max-width:700px;margin:0 auto;padding:44px 22px 0}
+.back{display:inline-block;margin-bottom:26px;font-size:15px}
+.article h1{font-size:clamp(34px,6.5vw,56px);line-height:1.07;letter-spacing:-.03em;margin:10px 0 14px;font-weight:700}
+.meta{color:var(--muted);font-size:15px}
+.dek{font-size:clamp(20px,3vw,24px);line-height:1.35;color:var(--muted);margin:18px 0 8px;letter-spacing:-.01em}
+.body h2{font-size:28px;letter-spacing:-.02em;margin:44px 0 10px}
+.body p,.body li{font-size:19px;line-height:1.55;letter-spacing:-.005em}
+.body p{margin:0 0 18px}
+.body ul,.body ol{padding-left:1.3em;margin:0 0 22px}
+.body li{margin-bottom:10px}
+.callout{background:var(--surface);border-radius:20px;padding:22px 24px;margin:28px 0;box-shadow:var(--shadow)}
+.callout b{display:block;margin-bottom:4px}
+.callout p{margin:0;font-size:17px;color:var(--muted)}
+.next{margin-top:56px;padding-top:26px;border-top:1px solid var(--line)}
+.next small{color:var(--muted);font-size:14px}
+.next a{display:block;font-size:24px;font-weight:600;letter-spacing:-.015em;color:var(--text);margin-top:4px}
+
+footer{margin-top:96px;background:var(--surface-2);border-top:1px solid var(--line);padding:34px 0 40px;color:var(--muted);font-size:13px;line-height:1.55}
+footer p{margin:0 0 10px;max-width:60em}
+
+@media (max-width:760px){
+  .nav ul{gap:16px}
+  .hero{padding-top:48px}
+  .featured{grid-template-columns:1fr}
+  .featured .art{min-height:170px;font-size:64px}
+  .featured .txt{padding:26px 22px}
+  section{padding-top:64px}
+  body{font-size:16px}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important} html{scroll-behavior:auto} }
+@media (prefers-reduced-motion: no-preference){
+  .phone{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes rise{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#/" aria-label="tufava home"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="bgb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#30b0ff"/><stop offset=".55" stop-color="#5e5ce6"/><stop offset="1" stop-color="#8a4fe0"/></linearGradient></defs><rect width="512" height="512" rx="116" fill="url(#bgb)"/><g fill="none" stroke="#fff" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"><path d="M236 112V316Q236 396 314 396"/><path d="M146 226L360 176"/></g><circle cx="388" cy="132" r="22" fill="#fff"/></svg><span>tufava</span></a>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#steps">Step by step</a></li>
+        <li><a href="#guides">Guides</a></li>
+        <li><a href="#glossary">Glossary</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Educational content only.</strong> Nothing on this site is financial, investment, legal or tax advice. Crypto assets, and memecoins especially, are highly volatile and you can lose everything you put in. Only use money you can afford to lose entirely.</p>
+    <p>Rules, fees and available apps vary by country. Check what is legal and regulated where you live, and consult a licensed professional for advice about your situation.</p>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- Content ---------- */
+const ARTICLES = [
+  {
+    slug:"first-trade-on-your-phone",
+    cat:"Basics", mins:6, icon:"📱",
+    title:"Your first crypto trade on a phone, step by step",
+    dek:"What to set up, what to tap, and what to double-check before you confirm.",
+    blocks:[
+      {p:"A trade is simply swapping one asset for another, for example US dollars for Bitcoin. Most beginners start with a regulated exchange app because it handles the hard parts: holding your funds, showing prices, and letting you deposit with a bank transfer or card."},
+      {h:"Before you open the app"},
+      {ul:[
+        "Download only from the official App Store or Google Play listing, and check the publisher name. Fake apps with near-identical icons exist.",
+        "Turn on two-factor authentication using an authenticator app. Text-message codes are weaker because phone numbers can be hijacked.",
+        "Use a password that you do not use anywhere else, ideally from a password manager.",
+        "Decide in advance how much you can lose without it hurting. That number is your budget, not a target."
+      ]},
+      {h:"The five taps"},
+      {ol:[
+        "Verify your identity. Regulated apps ask for ID and a selfie. This is normal and required in most countries.",
+        "Deposit money using a bank transfer or card. Bank transfers usually cost less in fees.",
+        "Search for the asset and check the ticker symbol, such as BTC or ETH, not just the name. Look-alike tokens exist.",
+        "Pick an order type. A market order buys right now at the best available price. A limit order waits until the price reaches a number you choose.",
+        "Read the confirmation screen: price, fee, and total cost. Only then confirm."
+      ]},
+      {h:"Market or limit?"},
+      {p:"Market orders are fast and simple, and fine for large, popular assets like Bitcoin. Limit orders give you control over price, and they protect you when an asset trades thinly and the price can jump between your tap and the fill."},
+      {callout:["Start small","Your first trade is for learning the interface, not for profit. Buy a small amount, look at your balance, then sell it. Once you have done the full loop, the app stops feeling scary."]}
+    ]
+  },
+  {
+    slug:"exchange-app-or-wallet",
+    cat:"Basics", mins:5, icon:"👛",
+    title:"Exchange app or self-custody wallet?",
+    dek:"Two ways to hold crypto on your phone, and the trade-offs that matter.",
+    blocks:[
+      {p:"There are two main kinds of apps. An exchange app holds your crypto for you, like a bank. A self-custody wallet puts the keys in your hands, so only you can move your funds."},
+      {h:"Exchange apps"},
+      {ul:[
+        "Easy to start: sign up, verify, deposit cash, buy.",
+        "Customer support and password recovery exist if you get locked out.",
+        "The company holds the keys. If it fails or freezes withdrawals, your access depends on it.",
+        "Usually limited to assets the exchange has chosen to list."
+      ]},
+      {h:"Self-custody wallets"},
+      {ul:[
+        "You control the keys, which are protected by a recovery phrase of 12 or 24 words.",
+        "Lets you swap tokens on decentralized exchanges, including most memecoins.",
+        "No support line and no reset. Lose the phrase and the funds are gone for good.",
+        "You are responsible for spotting scams, since nothing screens what you sign."
+      ]},
+      {h:"A practical setup"},
+      {p:"Many people use both: an exchange app to turn cash into crypto, and a wallet for anything on-chain. Keep only what you are actively using in the wallet on your phone, and treat it like cash in your pocket."},
+      {callout:["Protect your recovery phrase","Write it on paper and store it somewhere safe. Never screenshot it, never store it in notes or cloud photos, and never type it into a website. No real support person will ever ask for it."]}
+    ]
+  },
+  {
+    slug:"memecoins-explained",
+    cat:"Memecoins", mins:6, icon:"🐸",
+    title:"Memecoins, explained without the hype",
+    dek:"What you are actually buying, why prices move so fast, and why most of them end at zero.",
+    blocks:[
+      {p:"A memecoin is a token whose value comes mostly from attention: a joke, a character, a trend, a community. Unlike a company, it usually has no revenue, product, or promise attached. Its price rises when more people want it and falls when they lose interest."},
+      {h:"Why there are so many"},
+      {p:"On some blockchains, anyone can launch a token in minutes with a few taps and a small fee. Thousands appear every day. Most never find an audience, and many are created specifically to take money from newcomers."},
+      {h:"How people make and lose money"},
+      {ul:[
+        "A small number of early buyers sell into later buyers. Your profit, if any, comes from someone buying after you.",
+        "Prices can move 50% in an hour in either direction. That is normal for this market, not a sign of a bug.",
+        "Liquidity can vanish. If few people are buying, you may not be able to sell near the price on your screen.",
+        "Social media hype tends to peak after the biggest gains have already happened."
+      ]},
+      {h:"What a sensible approach looks like"},
+      {ol:[
+        "Treat memecoins as entertainment money, sized so that losing all of it changes nothing in your life.",
+        "Learn the safety checks first (see the scam guide), then trade tiny amounts.",
+        "Decide your exit before you buy: when you will sell if it rises, and when if it falls.",
+        "Never chase a coin that has already gone up several times in a day."
+      ]},
+      {callout:["The honest odds","Most memecoins lose nearly all their value. A few go up dramatically and those are the ones you hear about. Survivorship bias makes the market look kinder than it is."]}
+    ]
+  },
+  {
+    slug:"read-a-memecoin-page",
+    cat:"Memecoins", mins:6, icon:"📊",
+    title:"Reading a memecoin page on a small screen",
+    dek:"Six numbers worth checking before you buy anything.",
+    blocks:[
+      {p:"Chart apps and block explorers pack a lot into a phone screen. You do not need all of it. These six items tell you most of what matters."},
+      {h:"The six checks"},
+      {ul:[
+        "<b>Price</b> means little by itself. A coin priced at $0.0001 is not \"cheaper\" than one at $50. What counts is how many tokens exist.",
+        "<b>Market cap</b> is price times circulating supply. It tells you the size of the whole bet. A tiny market cap can move easily, in both directions.",
+        "<b>Liquidity</b> is the money sitting in the trading pool. It limits how much you can sell without crushing the price. Very low liquidity is a warning sign.",
+        "<b>24h volume</b> shows whether people are actually trading. Volume far above liquidity can mean frantic speculation, or bots.",
+        "<b>Holders and concentration</b> show whether a few wallets own most of the supply. If the top wallets hold a large share, they can dump on you.",
+        "<b>Age</b> matters. Brand-new tokens have no history. Many scams are hours old."
+      ]},
+      {h:"Check the real token"},
+      {p:"Copycat tokens often use the same name and logo as a popular coin. Get the contract address from the project's official page, not from a reply on social media, and confirm it matches the token you are about to buy."},
+      {h:"Test before you commit"},
+      {p:"Some tokens let you buy but not sell. Before putting in a meaningful amount, buy a very small amount and try to sell it. If the sell fails or the fees are huge, walk away."},
+      {callout:["A chart is not a forecast","Charts show what already happened. A coin that went up yesterday has no obligation to go up tomorrow."]}
+    ]
+  },
+  {
+    slug:"spot-the-scam",
+    cat:"Safety", mins:7, icon:"🛡️",
+    title:"How to spot a crypto scam before it costs you",
+    dek:"Rug pulls, honeypots, fake support, and the wallet habits that limit the damage.",
+    blocks:[
+      {p:"Scams are the biggest danger for new traders, bigger than price swings. The good news is that most follow a few patterns."},
+      {h:"Common traps"},
+      {ul:[
+        "<b>Rug pull:</b> the creators add liquidity, attract buyers, then withdraw it, leaving the token impossible to sell at any real price.",
+        "<b>Honeypot:</b> a token that lets you buy but blocks or heavily taxes selling.",
+        "<b>Fake tokens:</b> the same name and ticker as a real coin, with a different contract address.",
+        "<b>Phishing:</b> fake websites, fake airdrops, and direct messages from \"support\" that ask you to connect your wallet or share your phrase.",
+        "<b>Guaranteed returns:</b> anyone promising profit with no risk is lying."
+      ]},
+      {h:"Habits that protect you"},
+      {ol:[
+        "Open sites from bookmarks or the official app, not from links in messages or replies.",
+        "Never share your recovery phrase with anyone, for any reason.",
+        "Read what a wallet asks you to sign. If you do not understand it, decline.",
+        "Use a separate wallet with a small balance for experiments, and keep the rest elsewhere.",
+        "Review and revoke old token approvals from time to time.",
+        "Ignore unsolicited direct messages. Real support does not start conversations."
+      ]},
+      {callout:["The pressure test","Scammers create urgency: \"last chance\", \"only 10 spots\", \"send now\". If you feel rushed, that feeling is the signal. Close the app and come back tomorrow."]}
+    ]
+  },
+  {
+    slug:"fees-slippage-gas",
+    cat:"Basics", mins:5, icon:"🧾",
+    title:"Fees, slippage and gas in plain English",
+    dek:"The four hidden costs between the price you see and the amount you receive.",
+    blocks:[
+      {p:"The price on your screen is rarely the price you get. Four costs sit in between."},
+      {h:"The four costs"},
+      {ul:[
+        "<b>Trading fee:</b> what the app or exchange charges per trade, often a percentage.",
+        "<b>Spread:</b> the gap between the best buy price and the best sell price. Instant \"convert\" buttons often hide a wider spread.",
+        "<b>Network (gas) fee:</b> what you pay the blockchain to process a transaction. It rises when the network is busy.",
+        "<b>Slippage:</b> the difference between the price you expected and the price you got, because the market moved or your order was large compared to the liquidity."
+      ]},
+      {h:"A quick example"},
+      {p:"You swap $100 of a token with 5% slippage tolerance. If the price shifts against you while the transaction is processing, you may receive up to $5 less than you expected, before fees. Setting the tolerance very high guarantees the trade goes through, but it also lets bots and sudden moves take more from you."},
+      {h:"Small habits that save money"},
+      {ul:[
+        "Compare the total cost on the confirmation screen, not just the headline fee.",
+        "Use limit orders on exchanges when you are not in a hurry.",
+        "Avoid tiny trades on networks with high gas, since the fee can be larger than the trade.",
+        "For thinly traded memecoins, expect higher slippage and keep trades small."
+      ]},
+      {callout:["Costs compound","If a round trip (buy then sell) costs you 3% in total, the coin has to rise more than 3% just for you to break even."]}
+    ]
+  },
+  {
+    slug:"position-sizing",
+    cat:"Risk", mins:6, icon:"⚖️",
+    title:"Position sizing: the habit that keeps you in the game",
+    dek:"Decide how much you can lose before you decide what to buy.",
+    blocks:[
+      {p:"Most beginners think about how much they could win. Experienced traders start with how much they could lose, and size the trade to match."},
+      {h:"The risk-first method"},
+      {ol:[
+        "Pick the share of your account you are willing to lose on one trade. Many people choose 1% to 2% for liquid assets.",
+        "Choose your entry price and an exit price where you admit the idea was wrong (your stop).",
+        "Position size = amount you are willing to lose ÷ (entry price − stop price).",
+        "If the size comes out larger than you are comfortable holding, reduce it."
+      ]},
+      {h:"For memecoins, assume zero"},
+      {p:"A stop order is not a guarantee on a thin market. The price can gap straight through it. With memecoins, the safest assumption is that the whole position can go to zero, so size it so that outcome is a small, survivable loss."},
+      {h:"Plan before you enter"},
+      {ul:[
+        "Write down your entry, your exit if it rises, and your exit if it falls.",
+        "Consider selling part of a winning position, so you lock in some gain.",
+        "Avoid leverage while learning. It magnifies losses and can wipe out a position quickly.",
+        "Keep records of every trade. In many countries, gains are taxable."
+      ]},
+      {callout:["Boring wins","Surviving a long time with small, repeatable decisions beats one lucky trade. The goal of your first year is to still be learning at the end of it."]}
+    ]
+  }
+];
+
+const STEPS = [
+  "https://i.ibb.co/Rp0FgBz6/7-BD710-E7-FC80-47-D6-B78-B-BD732-CD44-A54.jpg",
+  "https://i.ibb.co/PzbL1spQ/5-B9-E0222-7256-4-E59-850-C-6-D895537-C287.jpg",
+  "https://i.ibb.co/tPbzkmWH/DC91-EF08-AE20-4-FE1-9-C4-F-E7-BC6796733-F.jpg",
+  "https://i.ibb.co/8LxpWccW/DB107-DF1-DC65-4-F02-9-FBF-D03-E21-C0-A134.jpg",
+  "https://i.ibb.co/5xjXw7Wt/845-D041-D-582-E-49-F3-A10-C-1-C0779-A786-CD.jpg",
+  "https://i.ibb.co/HyZvRTc/EC070669-4-CFA-4986-B3-F6-B8-E6380496-FD.jpg"
+];
+
+const GLOSSARY = [
+  ["DEX and CEX","A CEX (centralized exchange) is a company-run platform where you hold an account. A DEX (decentralized exchange) is a set of smart contracts you use directly from your own wallet."],
+  ["Liquidity","How easily you can buy or sell without moving the price. Deep liquidity means big trades barely change the price. Shallow liquidity means small trades can."],
+  ["Market cap","The current price multiplied by the number of tokens in circulation. It measures the size of the market for that token, not the money actually put into it."],
+  ["Slippage","The gap between the price you expected and the price you actually got when the trade executed."],
+  ["Gas fee","The fee paid to the blockchain network to process your transaction. It varies by network and by how busy it is."],
+  ["Recovery phrase","A list of 12 or 24 words that can restore your wallet. Anyone who has it controls your funds."],
+  ["Rug pull","When a project's creators remove the liquidity or sell their large holdings, leaving everyone else with a token that is hard or impossible to sell."],
+  ["Honeypot","A token built so that buyers cannot sell, or can only sell at a punishing tax."],
+  ["Market order and limit order","A market order trades immediately at the available price. A limit order only trades if the price reaches the level you set."],
+  ["Stop loss","A preset exit meant to limit a loss. On thin markets the price can jump past it, so it is not a guarantee."]
+];
+
+/* ---------- Helpers ---------- */
+const $app = document.getElementById("app");
+const byCat = c => c === "All" ? ARTICLES : ARTICLES.filter(a => a.cat === c);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+function renderBlocks(blocks){
+  return blocks.map(b => {
+    if (b.h) return `<h2>${b.h}</h2>`;
+    if (b.p) return `<p>${b.p}</p>`;
+    if (b.ul) return `<ul>${b.ul.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+    if (b.ol) return `<ol>${b.ol.map(i=>`<li>${i}</li>`).join("")}</ol>`;
+    if (b.callout) return `<div class="callout"><b>${b.callout[0]}</b><p>${b.callout[1]}</p></div>`;
+    return "";
+  }).join("");
+}
+
+/* ---------- Views ---------- */
+function cardHTML(a){
+  return `<a class="card" href="#/article/${a.slug}">
+    <span class="cat">${a.cat}</span>
+    <h3>${esc(a.title)}</h3>
+    <p>${esc(a.dek)}</p>
+    <span class="foot">${a.mins} min read</span>
+  </a>`;
+}
+
+function homeHTML(){
+  const feat = ARTICLES.find(a => a.slug === "memecoins-explained");
+  const cats = ["All","Basics","Memecoins","Safety","Risk"];
+  return `
+  <div class="hero">
+    <div class="wrap">
+      <h1>Trade crypto from your phone. Understand it first.</h1>
+      <p class="lead">Clear, careful guides to buying and selling crypto and memecoins on a smartphone, with safety and risk covered before the first tap.</p>
+      <div class="phone" aria-hidden="true">
+        <div class="screen">
+          <div class="island"></div>
+          <span class="demo-tag">Demo screen · sample numbers</span>
+          <div class="coin"><i>₿</i><div><b>Bitcoin</b><small>BTC</small></div></div>
+          <div class="price">$67,420.10</div>
+          <div class="chg">+2.4% today</div>
+          <svg class="spark" viewBox="0 0 260 96" preserveAspectRatio="none">
+            <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#32d74b" stop-opacity=".35"/><stop offset="1" stop-color="#32d74b" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0 70 L24 62 L48 66 L72 48 L96 54 L120 36 L144 44 L168 28 L192 34 L216 18 L240 24 L260 12 L260 96 L0 96 Z" fill="url(#g)"/>
+            <path d="M0 70 L24 62 L48 66 L72 48 L96 54 L120 36 L144 44 L168 28 L192 34 L216 18 L240 24 L260 12" fill="none" stroke="#32d74b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <div class="seg"><span class="on">Market</span><span>Limit</span></div>
+          <div class="amount"><div><small>You pay</small>$50.00</div><div><small>You get</small>0.00074 BTC</div></div>
+          <div class="buy">Review order</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="steps">
+    <div class="wrap">
+      <div class="sec-head"><div>
+        <h2>Step by step</h2>
+        <p class="sec-sub">Follow the screenshots, one step at a time.</p>
+      </div></div>
+      <div class="steps" id="steps-grid"></div>
+    </div>
+  </section>
+
+  <section id="guides">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2>Guides</h2>
+          <p class="sec-sub">Short, practical, and written for a phone screen.</p>
+        </div>
+        <div class="chips" role="group" aria-label="Filter guides by topic">
+          ${cats.map((c,i)=>`<button class="chip" data-cat="${c}" aria-pressed="${i===0}">${c}</button>`).join("")}
+        </div>
+      </div>
+      <div id="featured-slot">
+        <a class="featured" href="#/article/${feat.slug}">
+          <div class="art" aria-hidden="true">${feat.icon}</div>
+          <div class="txt">
+            <span class="cat">Featured · ${feat.cat}</span>
+            <h3>${esc(feat.title)}</h3>
+            <p>${esc(feat.dek)}</p>
+            <span class="more">Read the guide</span>
+          </div>
+        </a>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="video">
+    <div class="wrap">
+      <div class="sec-head"><div>
+        <h2>Day in the life of a memecoin millionaire</h2>
+      </div></div>
+      <div class="video">
+        <iframe src="https://www.youtube.com/embed/J8fubcSWOXQ?si=EHQuhy_URVCNNA9D" title="YouTube video player" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="glossary">
+    <div class="wrap">
+      <div class="sec-head"><div>
+        <h2>Glossary</h2>
+        <p class="sec-sub">The words you will see in every trading app.</p>
+      </div></div>
+      <div class="gloss">
+        ${GLOSSARY.map(([t,d])=>`<details><summary>${esc(t)}</summary><p>${esc(d)}</p></details>`).join("")}
+      </div>
+    </div>
+  </section>`;
+}
+
+function articleHTML(a){
+  const i = ARTICLES.indexOf(a);
+  const nx = ARTICLES[(i+1) % ARTICLES.length];
+  return `
+  <article class="article">
+    <a class="back" href="#guides">‹ All guides</a>
+    <div class="meta">${a.cat} · ${a.mins} min read</div>
+    <h1>${esc(a.title)}</h1>
+    <p class="dek">${esc(a.dek)}</p>
+    <div class="body">${renderBlocks(a.blocks)}</div>
+    <div class="callout"><b>Not financial advice</b><p>This guide is for education. Crypto is volatile and you can lose all of your money.</p></div>
+    <div class="next"><small>Next guide</small><a href="#/article/${nx.slug}">${esc(nx.title)}</a></div>
+  </article>`;
+}
+
+/* ---------- Interactions ---------- */
+function fillGrid(cat){
+  const list = byCat(cat).filter(a => !(cat==="All" && a.slug==="memecoins-explained"));
+  const grid = document.getElementById("grid");
+  const feat = document.getElementById("featured-slot");
+  feat.style.display = (cat==="All") ? "" : "none";
+  grid.innerHTML = list.length ? list.map(cardHTML).join("") : `<p class="empty">No guides here yet.</p>`;
+}
+
+function initHome(){
+  document.getElementById("steps-grid").innerHTML = STEPS.map((src,i) =>
+    `<figure class="step"><span class="num">${i+1}</span><div class="shot"><img src="${src}" alt="Step ${i+1}" loading="lazy"></div><figcaption>Step ${i+1}</figcaption></figure>`).join("");
+  document.querySelectorAll(".step img").forEach(img => img.addEventListener("error", () => {
+    const d = document.createElement("div"); d.className = "miss"; d.textContent = "Image could not be loaded."; img.replaceWith(d);
+  }));
+  fillGrid("All");
+  document.querySelectorAll(".chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+      fillGrid(btn.dataset.cat);
+    });
+  });
+}
+
+/* ---------- Router ---------- */
+function route(){
+  const h = location.hash;
+  const m = h.match(/^#\/article\/(.+)$/);
+  if (m){
+    const a = ARTICLES.find(x => x.slug === m[1]);
+    if (a){
+      $app.innerHTML = articleHTML(a);
+      document.title = a.title + " — tufava";
+      window.scrollTo(0,0);
+      return;
+    }
+  }
+  $app.innerHTML = homeHTML();
+  document.title = "tufava — Learn crypto and memecoin trading on your phone";
+  initHome();
+  const id = h.replace(/^#\/?/,"");
+  const target = id && document.getElementById(id);
+  if (target) target.scrollIntoView(); else window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+route();
+
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
